@@ -1,0 +1,368 @@
+mandatory: True
+code: |
+  interview_metadata # make sure we initialize the object
+  if not defined("interview_metadata['Protection_and_Care_of_Animals0020']"):
+    interview_metadata.initializeObject('Protection_and_Care_of_Animals0020')
+  interview_metadata['Protection_and_Care_of_Animals0020'].update({
+    'title': 'Petition Relative to Domestic Animals - 209A',
+    'short title': 'Pet Protection',
+    'description': 'Protection from abuse and care for domestic animals.',
+    'original_form': 'https://www.mass.gov/files/documents/2016/08/te/petition-209a-s11-relative-to-domesticated-animals.pdf',
+    'allowed courts': [
+      'Boston Municipal Court',
+      'District Court',
+      'Juvenile Court',
+      'Probate and Family Court',
+      'Superior Court',
+    ],
+    'preferred court': 'District Court',
+    'categories': [
+      'Domestic Violence / Safety of self',
+    ],
+    'logic block variable': 'Protection_and_Care_of_Animals0020',
+    'attachment block variable': 'Protection_and_Care_of_Animals0020_attachment',
+    'typical role': 'plaintiff',
+    'built_in_fields_used': [
+      {'variable': 'docket_number',
+       'transformed_variable': 'docket_numbers[0]',
+      },
+      {'variable': 'plaintiff',
+       'transformed_variable': 'str(plaintiffs[0])',
+      },
+      {'variable': 'defendant',
+       'transformed_variable': 'str(defendants[0])',
+      },
+      {'variable': 'petitioner_name__1',
+       'transformed_variable': 'str(petitioners[0])',
+      },
+      {'variable': 'respondent_name',
+       'transformed_variable': 'str(respondents[0])',
+      },
+      {'variable': 'petitioner_name__2',
+       'transformed_variable': 'str(petitioners[0])',
+      },
+      {'variable': 'signature_date',
+       'transformed_variable': 'signature_date',
+      },
+      {'variable': 'petitioner_signature',
+       'transformed_variable': 'petitioners[0].signature',
+      },
+      {'variable': 'court_name',
+       'transformed_variable': 'str(courts[0])',
+      },
+      ],
+    'fields': [
+      {'variable': 'boston_municipal_court',
+       'transformed_variable': 'boston_municipal_court',
+      'field_type': 'yesno',
+      },
+      {'variable': 'district_court',
+       'transformed_variable': 'district_court',
+      'field_type': 'yesno',
+      },
+      {'variable': 'juvenile_court',
+       'transformed_variable': 'juvenile_court',
+      'field_type': 'yesno',
+      },
+      {'variable': 'probate_family_court',
+       'transformed_variable': 'probate_family_court',
+      'field_type': 'yesno',
+      },
+      {'variable': 'superior_court',
+       'transformed_variable': 'superior_court',
+      'field_type': 'yesno',
+      },
+      {'variable': 'court_division',
+       'transformed_variable': 'courts[0].division',
+      'field_type': 'text',
+      'field_data_type': 'text',
+      },
+      {'variable': 'restraining_order_issued',
+       'transformed_variable': 'restraining_order_issued',
+      'field_type': 'yesno',
+      },
+      {'variable': 'list_pets_and_descriptions',
+       'transformed_variable': 'list_pets_and_descriptions',
+      'field_type': 'text',
+      'field_data_type': 'text',
+      },
+      {'variable': 'request_pet_protection_order',
+       'transformed_variable': 'request_pet_protection_order',
+      'field_type': 'yesno',
+      },
+      {'variable': 'animal_name__1',
+       'transformed_variable': 'animal_name',
+      'field_type': 'text',
+      'field_data_type': 'text',
+      },
+      {'variable': 'request_pet_care_order',
+       'transformed_variable': 'request_pet_care_order',
+      'field_type': 'yesno',
+      },
+      {'variable': 'animal_name__2',
+       'transformed_variable': 'animal_name',
+      'field_type': 'text',
+      'field_data_type': 'text',
+      },
+      {'variable': 'statement_in_support',
+       'transformed_variable': 'statement_in_support',
+      'field_type': 'area',
+      'field_data_type': 'text',
+      },
+      {'variable': 'petitioner_has_obtained_hearing_date',
+       'transformed_variable': 'petitioners[0].has_obtained_hearing_date',
+      'field_type': 'yesno',
+      },
+      {'variable': 'court_has_scheduled_hearing',
+       'transformed_variable': 'courts[0].has_scheduled_hearing',
+      'field_type': 'yesno',
+      },
+      {'variable': 'city_location',
+       'transformed_variable': 'city_location',
+      'field_type': 'text',
+      'field_data_type': 'text',
+      },
+      {'variable': 'month_day_year_hearing_date',
+       'transformed_variable': 'month_day_year_hearing_date',
+      'field_type': 'text',
+      'field_data_type': 'date',
+      },
+      {'variable': 'time_of_hearing',
+       'transformed_variable': 'time_of_hearing',
+      'field_type': 'text',
+      'field_data_type': 'text',
+      },
+      ],
+  })
+---
+id: Restraining Order Question
+question: |
+  Has a restraining order been requested or issued?
+subquestion: |
+  Placeholder text
+yesno: restraining_order_issued
+---
+id: Hearing Date Scheduling
+question: |
+  Hearing Date
+subquestion: |
+  Placeholder text
+fields:
+  - no label: user_or_court_choose_hearing_date
+    datatype: radio
+    choices: 
+      - Petitioner has obtained a hearing date: petitioner_obtained
+      - Court has scheduled the hearing date: court_scheduled
+---
+code: |
+  users[0].has_obtained_hearing_date = user_or_court_choose_hearing_date == "petitioner_obtained"
+  courts[0].has_scheduled_hearing = user_or_court_choose_hearing_date == "court_scheduled"
+---
+id: Hearing Information
+question: |
+  Hearing Details
+subquestion: |
+  Placeholder text
+fields:
+  - 'Hearing city': city_location
+    required: False
+  - 'Date of hearing': month_day_year_hearing_date
+    datatype: date
+    required: False
+  - 'Time of hearing': time_of_hearing
+    required: False
+---
+id: Pet Information
+question: |
+  List the names and descriptions of each pet and who owns them
+subquestion: |
+  Placeholder text
+fields:
+  - 'List pet names and descriptions': list_pets_and_descriptions
+---
+id: Type of Relief Sought
+question: |
+  What are you asking the court to do?
+subquestion: |
+  Placeholder text
+fields:
+  - 'Request pet protection order': request_pet_protection_order
+    datatype: yesno
+  - 'Animals to stop abusing': animal_name
+  - 'Request possession of pet': request_pet_care_order
+    datatype: yesno
+  - 'Animals you want possession of': animal_name
+---
+id: Court Division
+question: |
+  Which Court Division is your case being heard?
+subquestion: |
+  Placeholder text
+fields:
+  - 'Court Division': courts[0].division
+---
+id: Name of Court
+question: |
+  Which Court is your case being heard?
+subquestion: |
+  Placeholder text
+fields:
+  - 'Boston Municipal Court': boston_municipal_court
+    datatype: yesno
+  - 'District Court': district_court
+    datatype: yesno
+  - 'Juvenile Court': juvenile_court
+    datatype: yesno
+  - 'Probate and Family Court': probate_family_court
+    datatype: yesno
+  - 'Superior Court': superior_court
+    datatype: yesno
+---
+id: Reasons for Request
+question: |
+  Why are you requesting this order?
+subquestion: |
+  Placeholder text
+fields:
+  - 'Reasons for request for pet protection': statement_in_support
+    input type: area
+---
+progress: 100
+mandatory: True
+id: Placeholder download screen
+question: |
+  Placeholder download screen
+subquestion: |
+  Placeholder
+  
+  ### Next steps
+  
+  1. Step 1
+  1. Step 2
+  
+  Below is a preview of your form.
+  
+  ${Protection_and_Care_of_Animals0020_attachment }
+attachment code: Protection_and_Care_of_Animals0020_attachment
+---
+need: Protection_and_Care_of_Animals0020
+attachment:
+    variable name: Protection_and_Care_of_Animals0020_attachment
+    name: Pet Protection
+    filename: Pet_Protection
+    pdf template file: Protection_and_Care_of_Animals_ready_for_qc.pdf
+    fields: 
+      - "docket_number": ${ docket_numbers[0] }
+      - "plaintiff": ${ str(plaintiffs[0]) }
+      - "defendant": ${ str(defendants[0]) }
+      - "petitioner_name__1": ${ str(petitioners[0]) }
+      - "respondent_name": ${ str(respondents[0]) }
+      - "petitioner_name__2": ${ str(petitioners[0]) }
+      - "signature_date": ${ signature_date }
+      - "petitioner_signature": ${ petitioners[0].signature }
+      - "court_name": ${ str(courts[0]) }
+      - "boston_municipal_court": ${ boston_municipal_court }
+      - "district_court": ${ district_court }
+      - "juvenile_court": ${ juvenile_court }
+      - "probate_family_court": ${ probate_family_court }
+      - "superior_court": ${ superior_court }
+      - "court_division": ${ courts[0].division }
+      - "restraining_order_issued": ${ restraining_order_issued }
+      - "list_pets_and_descriptions": ${ list_pets_and_descriptions }
+      - "request_pet_protection_order": ${ request_pet_protection_order }
+      - "animal_name__1": ${ animal_name }
+      - "request_pet_care_order": ${ request_pet_care_order }
+      - "animal_name__2": ${ animal_name }
+      - "statement_in_support": ${ statement_in_support }
+      - "petitioner_has_obtained_hearing_date": ${ petitioners[0].has_obtained_hearing_date }
+      - "court_has_scheduled_hearing": ${ courts[0].has_scheduled_hearing }
+      - "city_location": ${ city_location }
+      - "month_day_year_hearing_date": ${ month_day_year_hearing_date }
+      - "time_of_hearing": ${ time_of_hearing }
+---
+include:
+  - docassemble.MAVirtualCourt:basic-questions.yml
+---
+comment: |
+  This question is used to introduce your interview. Please customize
+continue button field: Protection_and_Care_of_Animals0020_intro
+id: Name of Form
+question: |
+  Petition Relative to Domestic Animals - 209A
+subquestion: |
+  Protection from abuse and care for domestic animals.
+---
+id: interview_order_Protection_and_Care_of_Animals0020
+code: |
+  # This is a placeholder to control logic flow in this interview
+  # It was generated from interview_generator.py as an 'interview order' type question.
+  basic_questions_intro_screen
+  restraining_order_issued
+  Protection_and_Care_of_Animals0020_intro
+  # Set the preferred/allowed courts for this interview
+  preferred_court = interview_metadata["Protection_and_Care_of_Animals0020"]["preferred court"]
+  allowed_courts = interview_metadata["Protection_and_Care_of_Animals0020"]["allowed courts"]
+  boston_municipal_court
+  courts[0].division
+  list_pets_and_descriptions
+  request_pet_protection_order
+  statement_in_support
+  petitioners[0].has_obtained_hearing_date
+  city_location
+  docket_numbers[0]
+  str(plaintiffs[0])
+  str(defendants[0])
+  str(petitioners[0])
+  str(respondents[0])
+  str(petitioners[0])
+  signature_date
+  str(courts[0])
+  # By default, we'll mark any un-filled fields as DAEmpty(). This helps avoid errors if you intentionally hide a logic branch or mark a question not required
+  # Comment out the line below if you don't want this behavior. 
+  mark_unfilled_fields_empty(interview_metadata["Protection_and_Care_of_Animals0020"])
+  Protection_and_Care_of_Animals0020_preview_question # Pre-canned preview screen
+  basic_questions_signature_flow
+  petitioners[0].signature
+  Protection_and_Care_of_Animals0020 = True
+---
+continue button field: Protection_and_Care_of_Animals0020_preview_question
+id: Placeholder preview screen
+question: |
+  Placeholder preview screen
+subquestion: |
+  Here is a preview of the form you'll sign on the next page. 
+  
+   ${Protection_and_Care_of_Animals0020_attachment_preview}
+---
+attachment:
+    variable name: Protection_and_Care_of_Animals0020_attachment_preview
+    name: Pet Protection
+    filename: Pet_Protection
+    pdf template file: Protection_and_Care_of_Animals_ready_for_qc.pdf
+    fields: 
+      - "docket_number": ${ docket_numbers[0] }
+      - "plaintiff": ${ str(plaintiffs[0]) }
+      - "defendant": ${ str(defendants[0]) }
+      - "petitioner_name__1": ${ str(petitioners[0]) }
+      - "respondent_name": ${ str(respondents[0]) }
+      - "petitioner_name__2": ${ str(petitioners[0]) }
+      - "signature_date": ${ signature_date }
+      - "court_name": ${ str(courts[0]) }
+      - "boston_municipal_court": ${ boston_municipal_court }
+      - "district_court": ${ district_court }
+      - "juvenile_court": ${ juvenile_court }
+      - "probate_family_court": ${ probate_family_court }
+      - "superior_court": ${ superior_court }
+      - "court_division": ${ courts[0].division }
+      - "restraining_order_issued": ${ restraining_order_issued }
+      - "list_pets_and_descriptions": ${ list_pets_and_descriptions }
+      - "request_pet_protection_order": ${ request_pet_protection_order }
+      - "animal_name__1": ${ animal_name }
+      - "request_pet_care_order": ${ request_pet_care_order }
+      - "animal_name__2": ${ animal_name }
+      - "statement_in_support": ${ statement_in_support }
+      - "petitioner_has_obtained_hearing_date": ${ petitioners[0].has_obtained_hearing_date }
+      - "court_has_scheduled_hearing": ${ courts[0].has_scheduled_hearing }
+      - "city_location": ${ city_location }
+      - "month_day_year_hearing_date": ${ month_day_year_hearing_date }
+      - "time_of_hearing": ${ time_of_hearing }
