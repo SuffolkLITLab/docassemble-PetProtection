@@ -137,10 +137,29 @@ code: |
 ---
 id: Restraining Order Question
 question: |
-  Has a restraining order been requested or issued?
+  Do you currently have a restraining order or have you requested one?
 subquestion: |
-  Placeholder text
+  Common restraining orders that can include Pet Protection Orders include:  
+  * 209A's - Abuse Prevention Order  
+  * 258E's - Harrassment Prevention Order  
+  
+  Other types restraining orders from Probate and Family Court may also include:  
+  * 208§18 - Protection of Personal Liberty  
+  * 208§34B - Order to Vacate Marital Home  
+  * 208§34B - Order to Vacate Marital Home and Order of Restraint  
+  * 209§32 - Order Prohibiting Restraint of Personal Liberty  
+  * Other restraining orders related to a domestic relations, child custody, domestic abuse, or abuse prevention case.  
+  
 yesno: restraining_order_issued
+---
+id: no restraining order kickout
+event: kick_out_no_underlying_restraining_order
+question: |
+  Unable to complete form at this time
+buttons:
+  - Exit: exit
+  - Restart: restart
+
 ---
 id: Hearing Date Scheduling
 question: |
@@ -290,7 +309,7 @@ id: Name of Form
 question: |
   Petition Relative to Domestic Animals - 209A
 subquestion: |
-  Protection from abuse and care for domestic animals.
+  Protection from abuse and care for domestic animals. Complete this interview if you want someone to stop abusing your pet
 ---
 id: interview_order_Protection_and_Care_of_Animals0020
 code: |
@@ -298,6 +317,8 @@ code: |
   # It was generated from interview_generator.py as an 'interview order' type question.
   basic_questions_intro_screen
   restraining_order_issued
+  if not restraining_order_issued:
+    kick_out_no_underlying_restraining_order    
   Protection_and_Care_of_Animals0020_intro
   # Set the preferred/allowed courts for this interview
   preferred_court = interview_metadata["Protection_and_Care_of_Animals0020"]["preferred court"]
