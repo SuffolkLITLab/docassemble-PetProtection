@@ -316,10 +316,10 @@ code: |
   # This is a placeholder to control logic flow in this interview
   # It was generated from interview_generator.py as an 'interview order' type question.
   basic_questions_intro_screen
+  Protection_and_Care_of_Animals0020_intro
   restraining_order_issued
   if not restraining_order_issued:
-    kick_out_no_underlying_restraining_order    
-  Protection_and_Care_of_Animals0020_intro
+    kick_out_no_underlying_restraining_order
   # Set the preferred/allowed courts for this interview
   preferred_court = interview_metadata["Protection_and_Care_of_Animals0020"]["preferred court"]
   allowed_courts = interview_metadata["Protection_and_Care_of_Animals0020"]["allowed courts"]
