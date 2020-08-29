@@ -196,6 +196,7 @@ question: |
   List the names and descriptions of each pet and who owns them
 subquestion: |
   Placeholder text
+  ${ courts[0].department }
 fields:
   - 'List pet names and descriptions': list_pets_and_descriptions
   - Dog: dog
@@ -293,11 +294,11 @@ attachment:
       - "signature_date": ${ signature_date }
       - "petitioner_signature": ${ petitioners[0].signature }
       - "court_name": ${ str(courts[0]) }
-      - "boston_municipal_court": ${ boston_municipal_court }
-      - "district_court": ${ district_court }
-      - "juvenile_court": ${ juvenile_court }
-      - "probate_family_court": ${ probate_family_court }
-      - "superior_court": ${ superior_court }
+      - "boston_municipal_court": ${ str(courts[0].department) == "Boston Municipal Court" }
+      - "district_court": ${ str(courts[0].department) == "District Court" }
+      - "juvenile_court": ${ str(courts[0].department) == "Juvenile Court" }
+      - "probate_family_court": ${ str(courts[0].department) == "Probate and Family Court" }
+      - "superior_court": ${ str(courts[0].department) == "Superior Court" }
       - "court_division": ${ courts[0].division }
       - "restraining_order_issued": ${ restraining_order_issued }
       - "list_pets_and_descriptions": ${ list_pets_and_descriptions }
@@ -339,19 +340,18 @@ code: |
   # Set the preferred/allowed courts for this interview
   preferred_court = interview_metadata["Protection_and_Care_of_Animals0020"]["preferred court"]
   allowed_courts = interview_metadata["Protection_and_Care_of_Animals0020"]["allowed courts"]
-  boston_municipal_court
   courts[0].division
-  list_pets_and_descriptions
-  request_pet_protection_order
-  statement_in_support
-  petitioners[0].has_obtained_hearing_date
-  city_location
   docket_numbers[0]
   str(plaintiffs[0])
   str(defendants[0])
   str(petitioners[0])
   str(respondents[0])
   str(petitioners[0])
+  list_pets_and_descriptions
+  request_pet_protection_order
+  statement_in_support
+  petitioners[0].has_obtained_hearing_date
+  city_location
   signature_date
   str(courts[0])
   # By default, we'll mark any un-filled fields as DAEmpty(). This helps avoid errors if you intentionally hide a logic branch or mark a question not required
@@ -385,11 +385,11 @@ attachment:
       - "petitioner_name__2": ${ str(petitioners[0]) }
       - "signature_date": ${ signature_date }
       - "court_name": ${ str(courts[0]) }
-      - "boston_municipal_court": ${ boston_municipal_court }
-      - "district_court": ${ district_court }
-      - "juvenile_court": ${ juvenile_court }
-      - "probate_family_court": ${ probate_family_court }
-      - "superior_court": ${ superior_court }
+      - "boston_municipal_court": ${ str(courts[0].department) == "Boston Municipal Court" }
+      - "district_court": ${ str(courts[0].department) == "District Court" }
+      - "juvenile_court": ${ str(courts[0].department) == "Juvenile Court" }
+      - "probate_family_court": ${ str(courts[0].department) == "Probate and Family Court" }
+      - "superior_court": ${ str(courts[0].department) == "Superior Court" }
       - "court_division": ${ courts[0].division }
       - "restraining_order_issued": ${ restraining_order_issued }
       - "list_pets_and_descriptions": ${ list_pets_and_descriptions }

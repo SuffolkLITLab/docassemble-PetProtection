@@ -45,7 +45,7 @@ def find_package_data(where='.', package='', exclude=standard_exclude, exclude_d
 setup(name='docassemble.PetProtection',
       version='0.0.1',
       description=('A docassemble extension.'),
-      long_description='# docassemble.PetProtection\r\n\r\nA docassemble extension.\r\n\r\n## Author\r\n\r\nAPFAIG@EMAIL.WM.EDU\r\n\r\n',
+      long_description='# docassemble.PetProtection\r\n\r\nA docassemble extension.\r\n\r\n## Authors\r\n\r\nAlexander Faig\r\nAPFAIG@EMAIL.WM.EDU\r\n\r\nDerek Di Nardo\r\nderek@dinardo.email',
       long_description_content_type='text/markdown',
       author='Alex Faig & Derek Di Nardo',
       author_email='APFAIG@EMAIL.WM.EDU & derek@dinardo.email',
