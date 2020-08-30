@@ -230,20 +230,59 @@ fields:
 ---  
 question: |
   Are there others?
+subquestion: |
+  Here are the pets you've told us about so far.
+
+  Pet Name     |Breed
+  ---------------|----------------
+  % for item in pets:
+  ${ item.name } | ${ item.breed }
+  % endfor  
 yesno: pets.there_is_another
+
 ---
+question: |
+  Who owns ${ pets[i] }?
+fields:
+  - Someone already mentioned: pets[i].owner
+    choices:
+      - ${plaintiffs[0]}
+      - ${defendants[0]}    
+      - Both me and ${ defendants[0] } : bothPandD
+    disable others: True  
+  - Name: Name    
+---
+id: review pets
+question: |
+  Here are the pets you've told us about so far.
+subquestion: |
+  
+  Pet Name     |Breed|   Owner
+  ---------------|----------------|--------------
+  % for item in pets:
+  ${ item.name } | ${ item.breed }| ${item.owner}
+  % endfor    
+  
+  Is this information correct?  
+yesno: correct_pet_info
+---   
 id: Type of Relief Sought
 question: |
   What are you asking the court to do?
 subquestion: |
-  Placeholder text
+  You can ask the court to do 2 different things for each animal:  
+  
+    1. Order ${ defendants[0] } not to abuse, threaten, take, interfere with, transfer, encumber, hide, harm, or dispose of an animal.
+    2. Order that you be given possosion, care, and control of an animal.
 fields:
-  - 'Request pet protection order': request_pet_protection_order
-    datatype: yesno
-  - 'Animals to stop abusing': animal_name
-  - 'Request possession of pet': request_pet_care_order
-    datatype: yesno
-  - 'Animals you want possession of': animal_name
+  - '1. Select the pets you would like covered by a protection order': request_pet_protection_order
+    datatype: checkboxes
+    code: |
+      pets 
+  - '2. Select the pets you would like possesion of': request_pet_care_order
+    datatype: checkboxes
+    code: |
+      pets 
 ---
 id: Court Division
 question: |
@@ -252,23 +291,6 @@ subquestion: |
   Placeholder text
 fields:
   - 'Court Division': courts[0].division
----
-id: Name of Court
-question: |
-  Which Court is your case being heard?
-subquestion: |
-  Placeholder text
-fields:
-  - 'Boston Municipal Court': boston_municipal_court
-    datatype: yesno
-  - 'District Court': district_court
-    datatype: yesno
-  - 'Juvenile Court': juvenile_court
-    datatype: yesno
-  - 'Probate and Family Court': probate_family_court
-    datatype: yesno
-  - 'Superior Court': superior_court
-    datatype: yesno
 ---
 id: Reasons for Request
 question: |
@@ -373,7 +395,8 @@ code: |
   allowed_courts = interview_metadata["Protection_and_Care_of_Animals0020"]["allowed courts"]
   courts[0].division
   docket_numbers[0]
-  list_pets_and_descriptions
+  pets.gather()
+  correct_pet_info
   request_pet_protection_order
   statement_in_support
   petitioners[0].has_obtained_hearing_date
