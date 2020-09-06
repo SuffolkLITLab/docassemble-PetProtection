@@ -175,13 +175,13 @@ id: Hearing Date Scheduling
 question: |
   Hearing Date
 subquestion: |
-  Placeholder text
+  In order to have a hearing on this, you must either get a hearing date from the clerk and send a copy of this notice to ${defendants[0]} or ask the court to schedule a hearing and mail you and ${defendants[0]} when the hearing is scheduled.
 fields:
   - no label: user_or_court_choose_hearing_date
     datatype: radio
     choices: 
       - Petitioner has obtained a hearing date: petitioner_obtained
-      - Court has scheduled the hearing date: court_scheduled
+      - Court will schedule the hearing date: court_scheduled
 ---
 code: |
   users[0].has_obtained_hearing_date = user_or_court_choose_hearing_date == "petitioner_obtained"
@@ -248,9 +248,9 @@ fields:
     choices:
       - ${plaintiffs[0]}
       - ${defendants[0]}    
-      - Both me and ${ defendants[0] } : bothPandD
+      - Both me and ${ defendants[0] } : ${plaintiffs[0]} and ${defendants[0]}  
     disable others: True  
-  - Name: Name    
+  - Name: pets[i].owner    
 ---
 id: review pets
 question: |
@@ -273,7 +273,7 @@ subquestion: |
   You can ask the court to do 2 different things for each animal:  
   
     1. Order ${ defendants[0] } not to abuse, threaten, take, interfere with, transfer, encumber, hide, harm, or dispose of an animal.
-    2. Order that you be given possosion, care, and control of an animal.
+    2. Order that you be given possesion, care, and control of an animal.
 fields:
   - '1. Select the pets you would like covered by a protection order': request_pet_protection_order
     datatype: checkboxes
@@ -313,6 +313,8 @@ subquestion: |
   
   1. Step 1
   1. Step 2
+  
+  
   
   Below is a preview of your form.
   
@@ -371,7 +373,7 @@ code: |
 ---
 id: something
 code: |
-  list_pets_and_descriptions = pets  
+  list_pets_and_descriptions = pets
 ---
 id: interview_order_Protection_and_Care_of_Animals0020
 code: |
@@ -400,8 +402,12 @@ code: |
   request_pet_protection_order
   statement_in_support
   petitioners[0].has_obtained_hearing_date
-  city_location
+  if user_or_court_choose_hearing_date == "petitioner_obtained":
+    city_location
   signature_date
+  list_pets_and_descriptions = ""
+  for pet in pets:
+    list_pets_and_descriptions += pet.name + ", a " + pet.breed + ", owned by " + pet.owner + ". "
   str(courts[0])
   # By default, we'll mark any un-filled fields as DAEmpty(). This helps avoid errors if you intentionally hide a logic branch or mark a question not required
   # Comment out the line below if you don't want this behavior. 
@@ -416,8 +422,9 @@ id: Placeholder preview screen
 question: |
   Placeholder preview screen
 subquestion: |
-  Here is a preview of the form you'll sign on the next page. 
+  Here is a preview of the form you'll sign on the next page.  
   
+  ${list_pets_and_descriptions}  
    ${Protection_and_Care_of_Animals0020_attachment_preview}
 ---
 attachment:
@@ -442,10 +449,10 @@ attachment:
       - "court_division": ${ courts[0].division }
       - "restraining_order_issued": ${ restraining_order_issued }
       - "list_pets_and_descriptions": ${ list_pets_and_descriptions }
-      - "request_pet_protection_order": ${ request_pet_protection_order }
-      - "animal_name__1": ${ animal_name }
-      - "request_pet_care_order": ${ request_pet_care_order }
-      - "animal_name__2": ${ animal_name }
+      - "request_pet_protection_order": ${ request_pet_protection_order.any_true() }
+      - "animal_name__1": ${ request_pet_protection_order.true_values() }
+      - "request_pet_care_order": ${ request_pet_care_order.any_true() }
+      - "animal_name__2": ${ request_pet_care_order.true_values() }
       - "statement_in_support": ${ statement_in_support }
       - "petitioner_has_obtained_hearing_date": ${ petitioners[0].has_obtained_hearing_date }
       - "court_has_scheduled_hearing": ${ courts[0].has_scheduled_hearing }
