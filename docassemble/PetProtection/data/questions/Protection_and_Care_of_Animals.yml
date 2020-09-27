@@ -4,7 +4,7 @@ code: |
   if not defined("interview_metadata['Protection_and_Care_of_Animals0020']"):
     interview_metadata.initializeObject('Protection_and_Care_of_Animals0020')
   interview_metadata['Protection_and_Care_of_Animals0020'].update({
-    'title': 'Petition Relative to Domestic Animals - 209A',
+    'title': 'Petition Relative to Domestic Animals',
     'short title': 'Pet Protection',
     'description': 'Protection from abuse and care for domestic animals.',
     'original_form': 'https://www.mass.gov/files/documents/2016/08/te/petition-209a-s11-relative-to-domesticated-animals.pdf',
@@ -142,11 +142,13 @@ id: Restraining Order Question
 question: |
   Do you currently have a restraining order or have you requested one?
 subquestion: |
-  Common restraining orders that can include Pet Protection Orders include:  
-  * 209A's - Abuse Prevention Order  
-  * 258E's - Harrassment Prevention Order  
+  Common restraining orders that can include Pet Protection Orders include:
   
-  Other types restraining orders from Probate and Family Court may also include:  
+  * 209A - Abuse Prevention Order  
+  * 258E - Harrassment Prevention Order  
+  
+  Other types restraining orders can be from Probate and Family Court and include:
+  
   * 208§18 - Protection of Personal Liberty  
   * 208§34B - Order to Vacate Marital Home  
   * 208§34B - Order to Vacate Marital Home and Order of Restraint  
@@ -158,7 +160,13 @@ yesno: restraining_order_issued
 id: no restraining order kickout
 event: kick_out_no_underlying_restraining_order
 question: |
-  Unable to complete form at this time
+  You need to have a restraining order or be requesting a restraining order to get a Pet Protection order.  
+subquestion: |
+  If you have a restraining order already, please click back.  
+  
+  If you want to request a restraining order online, click [here](https://massaccess.suffolklitlab.org/dv/)  
+  
+  To get help from an advocate, please call 877.785.2020 to be connected to resources.
 buttons:
   - Exit: exit
   - Restart: restart
@@ -328,15 +336,15 @@ attachment:
     filename: Pet_Protection
     pdf template file: Protection_and_Care_of_Animals_ready_for_qc.pdf
     fields: 
+      - "signature_date": ${ signature_date }
+      - "petitioner_signature": ${ petitioners[0].signature }
       - "docket_number": ${ docket_numbers[0] }
       - "plaintiff": ${ str(plaintiffs[0]) }
       - "defendant": ${ str(defendants[0]) }
       - "petitioner_name__1": ${ str(petitioners[0]) }
       - "respondent_name": ${ str(respondents[0]) }
       - "petitioner_name__2": ${ str(petitioners[0]) }
-      - "signature_date": ${ signature_date }
-      - "petitioner_signature": ${ petitioners[0].signature }
-      - "court_name": ${ str(courts[0]) }
+      - "court_name": ${ str(courts[0])[:-6] }
       - "boston_municipal_court": ${ str(courts[0].department) == "Boston Municipal Court" }
       - "district_court": ${ str(courts[0].department) == "District Court" }
       - "juvenile_court": ${ str(courts[0].department) == "Juvenile Court" }
@@ -345,10 +353,10 @@ attachment:
       - "court_division": ${ courts[0].division }
       - "restraining_order_issued": ${ restraining_order_issued }
       - "list_pets_and_descriptions": ${ list_pets_and_descriptions }
-      - "request_pet_protection_order": ${ request_pet_protection_order }
-      - "animal_name__1": ${ animal_name }
-      - "request_pet_care_order": ${ request_pet_care_order }
-      - "animal_name__2": ${ animal_name }
+      - "request_pet_protection_order": ${ request_pet_protection_order.any_true() }
+      - "animal_name__1": ${ request_pet_protection_order.true_values() }
+      - "request_pet_care_order": ${ request_pet_care_order.any_true() }
+      - "animal_name__2": ${ request_pet_care_order.true_values() }
       - "statement_in_support": ${ statement_in_support }
       - "petitioner_has_obtained_hearing_date": ${ petitioners[0].has_obtained_hearing_date }
       - "court_has_scheduled_hearing": ${ courts[0].has_scheduled_hearing }
@@ -364,9 +372,10 @@ comment: |
 continue button field: Protection_and_Care_of_Animals0020_intro
 id: Name of Form
 question: |
-  Petition Relative to Domestic Animals - 209A
+  Petition Relative to Domestic Animals
 subquestion: |
-  Protection from abuse and care for domestic animals. Complete this interview if you want someone to stop abusing your pet
+  If you have a restraining order, you may ask the court to extend your restraining order to cover any pets you or your children own.
+  Complete this interview if you want someone to stop abusing your pet, or if you want the court to order that you be given custody of your pet.
 ---
 code: |
   user_role = 'plaintiff'
@@ -385,6 +394,8 @@ code: |
   if not restraining_order_issued:
     kick_out_no_underlying_restraining_order
   # Set the preferred/allowed courts for this interview
+  users[0].gathered = True
+  users[0].there_is_another = True
   str(plaintiffs[0])
   str(defendants[0])
   str(petitioners[0])
@@ -423,8 +434,7 @@ question: |
   Placeholder preview screen
 subquestion: |
   Here is a preview of the form you'll sign on the next page.  
-  
-  ${list_pets_and_descriptions}  
+
    ${Protection_and_Care_of_Animals0020_attachment_preview}
 ---
 attachment:
@@ -440,7 +450,7 @@ attachment:
       - "respondent_name": ${ str(respondents[0]) }
       - "petitioner_name__2": ${ str(petitioners[0]) }
       - "signature_date": ${ signature_date }
-      - "court_name": ${ str(courts[0]) }
+      - "court_name": ${ str(courts[0])[:-6] }
       - "boston_municipal_court": ${ str(courts[0].department) == "Boston Municipal Court" }
       - "district_court": ${ str(courts[0].department) == "District Court" }
       - "juvenile_court": ${ str(courts[0].department) == "Juvenile Court" }
