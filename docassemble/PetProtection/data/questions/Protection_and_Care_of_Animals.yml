@@ -164,7 +164,7 @@ question: |
 subquestion: |
   If you have a restraining order already, please click back.  
   
-  If you want to request a restraining order online, click [here](https://massaccess.suffolklitlab.org/dv/)  
+  If you want to request a restraining order online, click [here](https://massaccess.suffolklitlab.org/dv/).  
   
   To get help from an advocate, please call 877.785.2020 to be connected to resources.
 buttons:
@@ -188,8 +188,8 @@ fields:
   - no label: user_or_court_choose_hearing_date
     datatype: radio
     choices: 
-      - Petitioner has obtained a hearing date: petitioner_obtained
-      - Court will schedule the hearing date: court_scheduled
+      - I have already obtained a hearing date: petitioner_obtained
+      - I would like the court to schedule a hearing date: court_scheduled
 ---
 code: |
   users[0].has_obtained_hearing_date = user_or_court_choose_hearing_date == "petitioner_obtained"
@@ -211,12 +211,12 @@ fields:
 ---
 id: any pets to cover
 question: |
-  Do you have any pets you need protected from ${ defendants[0].name } by a protective order?
+  Do you have any animals you need protected from ${ defendants[0].name } by a protective order?
 yesno: pets.there_are_any
 ---
 id: Pet Information
 question: |
-  What is your ${ordinal(i)} pet's name and breed?
+  What is your ${ordinal(i)} animal's name and breed?
 subquestion: |
   Placeholder text
 fields:
@@ -237,9 +237,9 @@ fields:
     - Sheep: sheep
 ---  
 question: |
-  Are there others?
+  Do you have any there any other animals you want to include?
 subquestion: |
-  Here are the pets you've told us about so far.
+  Here are the pets you've told us about so far:
 
   Pet Name     |Breed
   ---------------|----------------
@@ -249,6 +249,7 @@ subquestion: |
 yesno: pets.there_is_another
 
 ---
+id: pet owner
 question: |
   Who owns ${ pets[i] }?
 fields:
@@ -258,7 +259,7 @@ fields:
       - ${defendants[0]}    
       - Both me and ${ defendants[0] } : ${plaintiffs[0]} and ${defendants[0]}  
     disable others: True  
-  - Name: pets[i].owner    
+  - Someone else (Please enter their full name): pets[i].owner    
 ---
 id: review pets
 question: |
@@ -304,7 +305,9 @@ id: Reasons for Request
 question: |
   Why are you requesting this order?
 subquestion: |
-  Placeholder text
+  Provide a brief statement about why you are requesting a protective order or why you are requesting custody of the animals.  
+  
+  You will have an opportunity to give a full explanation at the hearing.
 fields:
   - 'Reasons for request for pet protection': statement_in_support
     input type: area
@@ -313,18 +316,18 @@ progress: 100
 mandatory: True
 id: Placeholder download screen
 question: |
-  Placeholder download screen
+  Download your document
 subquestion: |
-  Placeholder
+
+  ### Now that your form is done, here is what you must do next:
   
-  ### Next steps
-  
-  1. Step 1
-  1. Step 2
-  
+  1. Download and save a copy for you
+  2. Submit to the court
+  3. Wait for the court to notify you of your hearing date
   
   
-  Below is a preview of your form.
+  
+  Below is is the signed version of your form.
   
   ${Protection_and_Care_of_Animals0020_attachment }
 attachment code: Protection_and_Care_of_Animals0020_attachment
@@ -334,7 +337,7 @@ attachment:
     variable name: Protection_and_Care_of_Animals0020_attachment
     name: Pet Protection
     filename: Pet_Protection
-    pdf template file: Protection_and_Care_of_Animals_ready_for_qc.pdf
+    pdf template file: Protection_and_Care_of_Animals_2020_09_30.pdf
     fields: 
       - "signature_date": ${ signature_date }
       - "petitioner_signature": ${ petitioners[0].signature }
@@ -374,8 +377,9 @@ id: Name of Form
 question: |
   Petition Relative to Domestic Animals
 subquestion: |
-  If you have a restraining order, you may ask the court to extend your restraining order to cover any pets you or your children own.
-  Complete this interview if you want someone to stop abusing your pet, or if you want the court to order that you be given custody of your pet.
+  If you have a restraining order, you may ask the court to extend your restraining order to cover any animals you or your children have.  
+  
+  Complete this interview if you want an order for someone not to abuse your animals, or if you want the court to order that you be given custody of your animals.
 ---
 code: |
   user_role = 'plaintiff'
@@ -394,8 +398,6 @@ code: |
   if not restraining_order_issued:
     kick_out_no_underlying_restraining_order
   # Set the preferred/allowed courts for this interview
-  users[0].gathered = True
-  users[0].there_is_another = True
   str(plaintiffs[0])
   str(defendants[0])
   str(petitioners[0])
@@ -410,6 +412,8 @@ code: |
   docket_numbers[0]
   pets.gather()
   correct_pet_info
+  if not correct_pet_info:
+    pets.gather()
   request_pet_protection_order
   statement_in_support
   petitioners[0].has_obtained_hearing_date
@@ -431,9 +435,9 @@ code: |
 continue button field: Protection_and_Care_of_Animals0020_preview_question
 id: Placeholder preview screen
 question: |
-  Placeholder preview screen
+  Review the document before signing
 subquestion: |
-  Here is a preview of the form you'll sign on the next page.  
+  Here is a preview of the form you'll sign on the next page.
 
    ${Protection_and_Care_of_Animals0020_attachment_preview}
 ---
@@ -441,7 +445,7 @@ attachment:
     variable name: Protection_and_Care_of_Animals0020_attachment_preview
     name: Pet Protection
     filename: Pet_Protection
-    pdf template file: Protection_and_Care_of_Animals_ready_for_qc.pdf
+    pdf template file: Protection_and_Care_of_Animals_2020_09_30.pdf
     fields: 
       - "docket_number": ${ docket_numbers[0] }
       - "plaintiff": ${ str(plaintiffs[0]) }
