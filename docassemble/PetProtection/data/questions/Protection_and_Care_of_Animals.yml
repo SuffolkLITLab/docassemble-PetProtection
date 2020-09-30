@@ -4,7 +4,7 @@ code: |
   if not defined("interview_metadata['Protection_and_Care_of_Animals0020']"):
     interview_metadata.initializeObject('Protection_and_Care_of_Animals0020')
   interview_metadata['Protection_and_Care_of_Animals0020'].update({
-    'title': 'Petition Relative to Domestic Animals - 209A',
+    'title': 'Petition Relative to Domestic Animals',
     'short title': 'Pet Protection',
     'description': 'Protection from abuse and care for domestic animals.',
     'original_form': 'https://www.mass.gov/files/documents/2016/08/te/petition-209a-s11-relative-to-domesticated-animals.pdf',
@@ -142,11 +142,13 @@ id: Restraining Order Question
 question: |
   Do you currently have a restraining order or have you requested one?
 subquestion: |
-  Common restraining orders that can include Pet Protection Orders include:  
-  * 209A's - Abuse Prevention Order  
-  * 258E's - Harrassment Prevention Order  
+  Common restraining orders that can include Pet Protection Orders include:
   
-  Other types restraining orders from Probate and Family Court may also include:  
+  * 209A - Abuse Prevention Order  
+  * 258E - Harrassment Prevention Order  
+  
+  Other types restraining orders can be from Probate and Family Court and include:
+  
   * 208§18 - Protection of Personal Liberty  
   * 208§34B - Order to Vacate Marital Home  
   * 208§34B - Order to Vacate Marital Home and Order of Restraint  
@@ -158,7 +160,13 @@ yesno: restraining_order_issued
 id: no restraining order kickout
 event: kick_out_no_underlying_restraining_order
 question: |
-  Unable to complete form at this time
+  You need to have a restraining order or be requesting a restraining order to get a Pet Protection order.  
+subquestion: |
+  If you have a restraining order already, please click back.  
+  
+  If you want to request a restraining order online, click [here](https://massaccess.suffolklitlab.org/dv/).  
+  
+  To get help from an advocate, please call 877.785.2020 to be connected to resources.
 buttons:
   - Exit: exit
   - Restart: restart
@@ -180,8 +188,8 @@ fields:
   - no label: user_or_court_choose_hearing_date
     datatype: radio
     choices: 
-      - Petitioner has obtained a hearing date: petitioner_obtained
-      - Court will schedule the hearing date: court_scheduled
+      - I have already obtained a hearing date: petitioner_obtained
+      - I would like the court to schedule a hearing date: court_scheduled
 ---
 code: |
   users[0].has_obtained_hearing_date = user_or_court_choose_hearing_date == "petitioner_obtained"
@@ -203,12 +211,12 @@ fields:
 ---
 id: any pets to cover
 question: |
-  Do you have any pets you need protected from ${ defendants[0].name } by a protective order?
+  Do you have any animals you need protected from ${ defendants[0].name } by a protective order?
 yesno: pets.there_are_any
 ---
 id: Pet Information
 question: |
-  What is your ${ordinal(i)} pet's name and breed?
+  What is your ${ordinal(i)} animal's name and breed?
 subquestion: |
   Placeholder text
 fields:
@@ -229,9 +237,9 @@ fields:
     - Sheep: sheep
 ---  
 question: |
-  Are there others?
+  Do you have any there any other animals you want to include?
 subquestion: |
-  Here are the pets you've told us about so far.
+  Here are the pets you've told us about so far:
 
   Pet Name     |Breed
   ---------------|----------------
@@ -241,6 +249,7 @@ subquestion: |
 yesno: pets.there_is_another
 
 ---
+id: pet owner
 question: |
   Who owns ${ pets[i] }?
 fields:
@@ -250,7 +259,7 @@ fields:
       - ${defendants[0]}    
       - Both me and ${ defendants[0] } : ${plaintiffs[0]} and ${defendants[0]}  
     disable others: True  
-  - Name: pets[i].owner    
+  - Someone else (Please enter their full name): pets[i].owner    
 ---
 id: review pets
 question: |
@@ -296,7 +305,9 @@ id: Reasons for Request
 question: |
   Why are you requesting this order?
 subquestion: |
-  Placeholder text
+  Provide a brief statement about why you are requesting a protective order or why you are requesting custody of the animals.  
+  
+  You will have an opportunity to give a full explanation at the hearing.
 fields:
   - 'Reasons for request for pet protection': statement_in_support
     input type: area
@@ -305,18 +316,18 @@ progress: 100
 mandatory: True
 id: Placeholder download screen
 question: |
-  Placeholder download screen
+  Download your document
 subquestion: |
-  Placeholder
+
+  ### Now that your form is done, here is what you must do next:
   
-  ### Next steps
-  
-  1. Step 1
-  1. Step 2
-  
+  1. Download and save a copy for you
+  2. Submit to the court
+  3. Wait for the court to notify you of your hearing date
   
   
-  Below is a preview of your form.
+  
+  Below is is the signed version of your form.
   
   ${Protection_and_Care_of_Animals0020_attachment }
 attachment code: Protection_and_Care_of_Animals0020_attachment
@@ -326,17 +337,17 @@ attachment:
     variable name: Protection_and_Care_of_Animals0020_attachment
     name: Pet Protection
     filename: Pet_Protection
-    pdf template file: Protection_and_Care_of_Animals_ready_for_qc.pdf
+    pdf template file: Protection_and_Care_of_Animals_2020_09_30.pdf
     fields: 
+      - "signature_date": ${ signature_date }
+      - "petitioner_signature": ${ petitioners[0].signature }
       - "docket_number": ${ docket_numbers[0] }
       - "plaintiff": ${ str(plaintiffs[0]) }
       - "defendant": ${ str(defendants[0]) }
       - "petitioner_name__1": ${ str(petitioners[0]) }
       - "respondent_name": ${ str(respondents[0]) }
       - "petitioner_name__2": ${ str(petitioners[0]) }
-      - "signature_date": ${ signature_date }
-      - "petitioner_signature": ${ petitioners[0].signature }
-      - "court_name": ${ str(courts[0]) }
+      - "court_name": ${ str(courts[0])[:-6] }
       - "boston_municipal_court": ${ str(courts[0].department) == "Boston Municipal Court" }
       - "district_court": ${ str(courts[0].department) == "District Court" }
       - "juvenile_court": ${ str(courts[0].department) == "Juvenile Court" }
@@ -345,10 +356,10 @@ attachment:
       - "court_division": ${ courts[0].division }
       - "restraining_order_issued": ${ restraining_order_issued }
       - "list_pets_and_descriptions": ${ list_pets_and_descriptions }
-      - "request_pet_protection_order": ${ request_pet_protection_order }
-      - "animal_name__1": ${ animal_name }
-      - "request_pet_care_order": ${ request_pet_care_order }
-      - "animal_name__2": ${ animal_name }
+      - "request_pet_protection_order": ${ request_pet_protection_order.any_true() }
+      - "animal_name__1": ${ request_pet_protection_order.true_values() }
+      - "request_pet_care_order": ${ request_pet_care_order.any_true() }
+      - "animal_name__2": ${ request_pet_care_order.true_values() }
       - "statement_in_support": ${ statement_in_support }
       - "petitioner_has_obtained_hearing_date": ${ petitioners[0].has_obtained_hearing_date }
       - "court_has_scheduled_hearing": ${ courts[0].has_scheduled_hearing }
@@ -364,9 +375,11 @@ comment: |
 continue button field: Protection_and_Care_of_Animals0020_intro
 id: Name of Form
 question: |
-  Petition Relative to Domestic Animals - 209A
+  Petition Relative to Domestic Animals
 subquestion: |
-  Protection from abuse and care for domestic animals. Complete this interview if you want someone to stop abusing your pet
+  If you have a restraining order, you may ask the court to extend your restraining order to cover any animals you or your children have.  
+  
+  Complete this interview if you want an order for someone not to abuse your animals, or if you want the court to order that you be given custody of your animals.
 ---
 code: |
   user_role = 'plaintiff'
@@ -399,6 +412,8 @@ code: |
   docket_numbers[0]
   pets.gather()
   correct_pet_info
+  if not correct_pet_info:
+    pets.gather()
   request_pet_protection_order
   statement_in_support
   petitioners[0].has_obtained_hearing_date
@@ -420,18 +435,17 @@ code: |
 continue button field: Protection_and_Care_of_Animals0020_preview_question
 id: Placeholder preview screen
 question: |
-  Placeholder preview screen
+  Review the document before signing
 subquestion: |
-  Here is a preview of the form you'll sign on the next page.  
-  
-  ${list_pets_and_descriptions}  
+  Here is a preview of the form you'll sign on the next page.
+
    ${Protection_and_Care_of_Animals0020_attachment_preview}
 ---
 attachment:
     variable name: Protection_and_Care_of_Animals0020_attachment_preview
     name: Pet Protection
     filename: Pet_Protection
-    pdf template file: Protection_and_Care_of_Animals_ready_for_qc.pdf
+    pdf template file: Protection_and_Care_of_Animals_2020_09_30.pdf
     fields: 
       - "docket_number": ${ docket_numbers[0] }
       - "plaintiff": ${ str(plaintiffs[0]) }
@@ -440,7 +454,7 @@ attachment:
       - "respondent_name": ${ str(respondents[0]) }
       - "petitioner_name__2": ${ str(petitioners[0]) }
       - "signature_date": ${ signature_date }
-      - "court_name": ${ str(courts[0]) }
+      - "court_name": ${ str(courts[0])[:-6] }
       - "boston_municipal_court": ${ str(courts[0].department) == "Boston Municipal Court" }
       - "district_court": ${ str(courts[0].department) == "District Court" }
       - "juvenile_court": ${ str(courts[0].department) == "Juvenile Court" }
