@@ -7,7 +7,7 @@ code: |
     'title': 'Petition Relative to Domestic Animals',
     'short title': 'Pet Protection',
     'description': 'Protection from abuse and care for domestic animals.',
-    'original_form': 'https://www.mass.gov/files/documents/2016/08/te/petition-209a-s11-relative-to-domesticated-animals.pdf',
+    'original_form': 'https://www.mass.gov/doc/petition-filed-pursuant-to-gl-209a-s-11-relative-to-domesticated-animals/download',
     'allowed courts': [
       'Boston Municipal Court',
       'District Court',
@@ -166,7 +166,7 @@ question: |
 subquestion: |
   If you have a restraining order already, please click back.  
   
-  If you want to request a restraining order online, click [here](https://massaccess.suffolklitlab.org/dv/).  
+  If you want to request a restraining order online, use the [restraining order interview](https://massaccess.suffolklitlab.org/dv/).
   
   To get help from an advocate, please call 877.785.2020 to be connected to resources.
 buttons:
