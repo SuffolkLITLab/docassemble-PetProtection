@@ -7,7 +7,7 @@ code: |
     'title': 'Petition Relative to Domestic Animals',
     'short title': 'Pet Protection',
     'description': 'Protection from abuse and care for domestic animals.',
-    'original_form': 'https://www.mass.gov/files/documents/2016/08/te/petition-209a-s11-relative-to-domesticated-animals.pdf',
+    'original_form': 'https://www.mass.gov/doc/petition-filed-pursuant-to-gl-209a-s-11-relative-to-domesticated-animals/download',
     'allowed courts': [
       'Boston Municipal Court',
       'District Court',
@@ -155,7 +155,9 @@ subquestion: |
   * 209§32 - Order Prohibiting Restraint of Personal Liberty  
   * Other restraining orders related to a domestic relations, child custody, domestic abuse, or abuse prevention case.  
   
-yesno: restraining_order_issued
+fields:
+  - no label: restraining_order_issued
+    datatype: yesnoradio
 ---
 id: no restraining order kickout
 event: kick_out_no_underlying_restraining_order
@@ -164,7 +166,7 @@ question: |
 subquestion: |
   If you have a restraining order already, please click back.  
   
-  If you want to request a restraining order online, click [here](https://massaccess.suffolklitlab.org/dv/).  
+  If you want to request a restraining order online, use the [restraining order interview](https://massaccess.suffolklitlab.org/dv/).
   
   To get help from an advocate, please call 877.785.2020 to be connected to resources.
 buttons:
@@ -212,7 +214,9 @@ fields:
 id: any pets to cover
 question: |
   Do you have any animals you need protected from ${ defendants[0].name } by a protective order?
-yesno: pets.there_are_any
+fields:
+  - no label: pets.there_are_any
+    datatype: yesnoradio
 ---
 id: Pet Information
 question: |
@@ -236,6 +240,7 @@ fields:
     - Donkey: donkey
     - Sheep: sheep
 ---  
+id: "do you have any there any other animals you want to include"
 question: |
   Do you have any there any other animals you want to include?
 subquestion: |
@@ -246,7 +251,9 @@ subquestion: |
   % for item in pets:
   ${ item.name } | ${ item.breed }
   % endfor  
-yesno: pets.there_is_another
+fields:
+  - no label: pets.there_is_another
+    datatype: yesnoradio
 
 ---
 id: pet owner
@@ -273,7 +280,9 @@ subquestion: |
   % endfor    
   
   Is this information correct?  
-yesno: correct_pet_info
+fields:
+  - no label: correct_pet_info
+    datatype: yesnoradio
 ---   
 id: Type of Relief Sought
 question: |
